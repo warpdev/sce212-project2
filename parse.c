@@ -40,7 +40,28 @@ instruction parsing_instr(const char *buffer, const int index)
     {
         t=t<<6;
         t=t>>6;
-        instr.r_t.target=t;
+        switch(instr.opcode)
+        {
+            //Type I
+            case 0x9:		//(0x001001)ADDIU
+            case 0xc:		//(0x001100)ANDI
+            case 0xf:		//(0x001111)LUI	
+            case 0xd:		//(0x001101)ORI
+            case 0xb:		//(0x001011)SLTIU
+            case 0x23:		//(0x100011)LW
+            case 0x2b:		//(0x101011)SW
+            case 0x4:		//(0x000100)BEQ
+            case 0x5:		//(0x000101)BNE
+                instr.r_t.r_i.r_i.imm=(t<<16)>>16;
+                t=t>>16;
+                instr.r_t.r_i.rt=(t<<27)>>27;
+                t=t>>5;
+                instr.r_t.r_i.rs=t;
+                break;
+            default:
+                instr.r_t.target=t;
+                break;
+        }
     }
     //fprintf(stderr,"%s %d %d %d %d\n", buffer,instr.r_t.r_i.rs,instr.r_t.r_i.rt,instr.r_t.r_i.r_i.r.rd, instr.r_t.r_i.r_i.r.shamt);
     return instr;
