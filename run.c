@@ -35,7 +35,7 @@ instruction* get_inst_info(uint32_t pc)
 void process_instruction()
 {
 	/** Implement this function */
-    if(INSTRUCTION_COUNT>=NUM_INST)
+    if(((CURRENT_STATE.PC-MEM_TEXT_START)/4)>=NUM_INST)
     {
         RUN_BIT=FALSE;
         return;
